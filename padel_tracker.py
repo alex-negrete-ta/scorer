@@ -611,7 +611,7 @@ def main():
 
                     #If it quits, it quits.
                     if event.type == pygame.QUIT:
-                        os.system("python updater.py")
+                        os.system("v01_updater_lanh.py")
                         print ('updating software')
                         quit()
 
@@ -653,7 +653,7 @@ def main():
 
                         #Quits the game if escape is pressed.
                         elif event.key == pygame.K_ESCAPE:
-                            os.system("python updater.py")
+                            os.system("v01_updater_lanh.py")
                             print ('updating software')
                             quit()
 
