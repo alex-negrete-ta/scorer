@@ -361,7 +361,7 @@ def main():
         
         # Create player 1. #### Cand move to con ###
         player1_x = int(center_x/6 - 100)
-        player1_y = int(center_y -150) 
+        player1_y = int(center_y -300) 
         player1_color = con.steel_blue
         player1 = Player(
                         player1_x, 
