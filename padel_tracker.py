@@ -702,7 +702,7 @@ def main():
                 
                 # Render the labels
                 puntos_label_p1 = con.label_font.render(
-                                            "    SETS    JUEGOS   PUNTOS", 
+                                            "     SETS    JUEGOS  PUNTOS", 
                                                         True, 
                                                         con.dark_gray
                                                         )
