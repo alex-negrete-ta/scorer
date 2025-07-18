@@ -13,6 +13,7 @@ import serial.tools.list_ports
 import time
 import v01_padeltracker_dataexporter_lanh as ptexp
 import v01_updater_lanh as appup
+import license_key as lkey
 
 # Find all the ports in the serial library and check if input comes from it.
 def find_all_arduino_ports():
@@ -168,6 +169,7 @@ def check_license(license_key):
 
 # Initialize the software.
 pygame.init()
+pygame.mixer.init()
 
 # Set the font used for the software.
 padel_font = pygame.font.SysFont(con.font, con.font_size, bold = True)
@@ -625,15 +627,19 @@ def main():
                         if event.key == pygame.K_LEFT:
                             if player1_controls_left:
                                 score_point(player1, player2)
+                                con.peep_sound.play()
                             else:
                                 score_point(player2, player1)
+                                con.peep_sound.play()
 
                         # Point if right key is pressed to the player who controls it. 
                         elif event.key == pygame.K_RIGHT:
                             if player1_controls_left:
                                 score_point(player2, player1)
+                                con.peep_sound.play()
                             else:
                                 score_point(player1, player2)
+                                con.peep_sound.play()
 
                         # Enter to start time, if it has started and pressed it resets.
                         elif event.key == pygame.K_RETURN:
@@ -754,7 +760,7 @@ def main():
 
 if __name__ == '__main__':
     #The computers user license in the data base.
-    user_license = str(con.license_key)  # Could load this from a file or user input
+    user_license = str(lkey.license_key)  # Could load this from a file or user input
 
     # Gets the user name and cheks if its valid from the function.
     is_valid, message = check_license(user_license)
