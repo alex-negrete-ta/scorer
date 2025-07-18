@@ -2,7 +2,7 @@ import pygame
 import os
 import requests
 
-license_key = "ABC123"
+
 # Init and get screen resolution
 pygame.init()
 pygame.mixer.init()
