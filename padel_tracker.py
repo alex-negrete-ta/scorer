@@ -364,7 +364,7 @@ def main():
         # Create player 1. #### Cand move to con ###
         player1_x = int(center_x/6 - 100)
         player1_y = int(center_y -200) 
-        player1_color = con.steel_blue
+        player1_color = con.marine_blue
         player1 = Player(
                         player1_x, 
                         player1_y, 
@@ -645,6 +645,7 @@ def main():
                         elif event.key == pygame.K_RETURN:
                             if not match_started:
                                 start_time, match_started = start_timer(match_started, start_time)
+                                con.bell_sound.play()
                             else:
                                 p1_score = f"{player1.set}-{player1.games}-{player1.points}"
                                 p2_score = f"{player2.set}-{player2.games}-{player2.points}"
@@ -701,7 +702,7 @@ def main():
 
                 # Render the timer text
                 timer_surface = con.time_font.render(
-                                                f"Tiempo: {formatted_time}", 
+                                                f"          T: {formatted_time}", 
                                                 True, 
                                                 con.dark_gray
                                                   )

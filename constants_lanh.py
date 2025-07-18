@@ -22,6 +22,7 @@ powder_blue = [176, 224, 230]
 steel_blue = [70, 130, 180]
 airforce_blue = [93, 138, 168]
 indian_red = [205, 92, 92]
+marine_blue =[0,100,140]
 rosy_brown = [188, 143, 143]
 fire_brick = [178, 34, 34]
 charcoal = [54, 69, 79]
@@ -69,7 +70,7 @@ logo_rect = logo_img.get_rect(midtop=(screen_width // 2, 0))
 GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQGzn7wVZMkWaImxEyxxv4V4c6e_BPKdye7Wh5QX0D8KQ15Y8jFj4QOLAxvCnflR7XqonJoB7Ul1ynB/pub?output=csv"
 response = requests.get(GOOGLE_SHEET_CSV_URL, timeout=10, headers={"Cache-Control": "no-cache"})
 
-time_font = pygame.font.SysFont("arialblack", 70, bold=True)
+time_font = pygame.font.SysFont("arialblack", 80, bold=True)
 font = "verdana" #verdana, dejavusans o arial black.
 font_size = int((center_x + center_y)/14)
 
@@ -90,4 +91,5 @@ logo_rect = logo_img.get_rect(midtop=(width // 2, 0))
 
 # Create a sound
 peep_sound = pygame.mixer.Sound("beep.wav")
+bell_sound = pygame.mixer.Sound("bell.wav")
 
