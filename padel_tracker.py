@@ -613,6 +613,9 @@ def main():
 
                     #If it quits, it quits.
                     if event.type == pygame.QUIT:
+                        p1_score = f"{player1.set}-{player1.games}-{player1.points}"
+                        p2_score = f"{player2.set}-{player2.games}-{player2.points}"
+                        ptexp.export_to_google_sheets(winner, p1_score, p2_score, elapsed_time,user_license)
                         os.system("v01_updater_lanh.py")
                         print ('updating software')
                         quit()
@@ -660,6 +663,9 @@ def main():
 
                         #Quits the game if escape is pressed.
                         elif event.key == pygame.K_ESCAPE:
+                            p1_score = f"{player1.set}-{player1.games}-{player1.points}"
+                            p2_score = f"{player2.set}-{player2.games}-{player2.points}"
+                            ptexp.export_to_google_sheets(winner, p1_score, p2_score, elapsed_time,user_license)
                             os.system("v01_updater_lanh.py")
                             print ('updating software')
                             quit()
