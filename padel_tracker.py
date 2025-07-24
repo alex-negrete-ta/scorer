@@ -699,7 +699,7 @@ def main():
                 current_time = datetime.now().strftime("%H:%M:%S")
 
                 # Reset timer for inactivity.
-                if match_started and (time.time() - last_input_time > 30):
+                if match_started and (time.time() - last_input_time > 1800):
                     print("🔁 Match reset due to 30 minutes of inactivity.")
 
                     match_started = False
