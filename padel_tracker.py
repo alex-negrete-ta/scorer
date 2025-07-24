@@ -15,6 +15,9 @@ import v01_padeltracker_dataexporter_lanh as ptexp
 import v01_updater_lanh as appup
 import license_key as lkey
 
+# Version Number
+version_number = "1.0.6"
+
 # Find all the ports in the serial library and check if input comes from it.
 def find_all_arduino_ports():
     '''
@@ -349,6 +352,9 @@ def main():
         enter_start_time = 0
         ENTER_HOLD_DURATION = 3000 
 
+        # Last input time variable
+        last_input_time = time.time()
+
         # Add variable to the switch player.
         player1_controls_left = True
         
@@ -585,7 +591,7 @@ def main():
                 p2_score = f"{player2.set}-{player2.games}-{player2.points}"
                 
 
-                ptexp.export_to_google_sheets(winner, p1_score, p2_score, elapsed_time,user_license)
+                ptexp.export_to_google_sheets(winner, p1_score, p2_score, elapsed_time,user_license, version_number)
 
                 match_started, start_time, elapsed_time = reset_timer(match_started, start_time, elapsed_time)
                 player.reset_game()
@@ -615,13 +621,14 @@ def main():
                     if event.type == pygame.QUIT:
                         p1_score = f"{player1.set}-{player1.games}-{player1.points}"
                         p2_score = f"{player2.set}-{player2.games}-{player2.points}"
-                        ptexp.export_to_google_sheets(winner, p1_score, p2_score, elapsed_time,user_license)
+                        ptexp.export_to_google_sheets(winner, p1_score, p2_score, elapsed_time,user_license, version_number)
                         os.system("v01_updater_lanh.py")
                         print ('updating software')
                         quit()
 
                     #Checks if a key is pressed.
                     elif event.type == pygame.KEYDOWN:
+                        last_input_time = time.time()
                         # Clear winner if LEFT, RIGHT or ENTER is pressed
                         if winner and event.key in [pygame.K_LEFT, pygame.K_RIGHT, pygame.K_RETURN]:
                             winner = None
@@ -652,7 +659,7 @@ def main():
                             else:
                                 p1_score = f"{player1.set}-{player1.games}-{player1.points}"
                                 p2_score = f"{player2.set}-{player2.games}-{player2.points}"
-                                ptexp.export_to_google_sheets(winner, p1_score, p2_score, elapsed_time,user_license)
+                                ptexp.export_to_google_sheets(winner, p1_score, p2_score, elapsed_time,user_license, version_number)
                                 enter_key_held = True
                                 enter_start_time = pygame.time.get_ticks()
 
@@ -665,7 +672,7 @@ def main():
                         elif event.key == pygame.K_ESCAPE:
                             p1_score = f"{player1.set}-{player1.games}-{player1.points}"
                             p2_score = f"{player2.set}-{player2.games}-{player2.points}"
-                            ptexp.export_to_google_sheets(winner, p1_score, p2_score, elapsed_time,user_license)
+                            ptexp.export_to_google_sheets(winner, p1_score, p2_score, elapsed_time,user_license, version_number)
                             os.system("v01_updater_lanh.py")
                             print ('updating software')
                             quit()
@@ -678,6 +685,8 @@ def main():
                  # Updating the game tick in fps values, and updating display.
                 clock.tick(fps)
 
+
+
                 # Draws the background
                 con.win.blit(background, (0, 0))
 
@@ -688,6 +697,17 @@ def main():
 
                 # Get current time as a string
                 current_time = datetime.now().strftime("%H:%M:%S")
+
+                # Reset timer for inactivity.
+                if match_started and (time.time() - last_input_time > 30):
+                    print("🔁 Match reset due to 30 minutes of inactivity.")
+
+                    match_started = False
+                    last_input_time = time.time()
+                    p1_score = f"{player1.set}-{player1.games}-{player1.points}"
+                    p2_score = f"{player2.set}-{player2.games}-{player2.points}"
+                    ptexp.export_to_google_sheets(winner, p1_score, p2_score, elapsed_time, user_license, version_number)
+                    match_started, start_time, elapsed_time = reset_timer(match_started, start_time, elapsed_time)
 
                 # Render the time.
                 time_surface = con.time_font.render(
