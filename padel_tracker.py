@@ -16,7 +16,10 @@ import v01_updater_lanh as appup
 import license_key as lkey
 
 # Version Number
-version_number = "1.0.6"
+version_number = "1.0.7"
+
+# Set of ports already connected.
+connected_ports = set()
 
 # Find all the ports in the serial library and check if input comes from it.
 def find_all_arduino_ports():
@@ -92,18 +95,19 @@ def listen_to_arduino(port):
     #Marks an error if there is an error.
     except serial.SerialException as e:
         print(f"[{port}] Serial error: {e}")
+        connected_ports.discard(port)
 
     return ser
 
 def arduino_commands():
-    ports = find_all_arduino_ports()
-    if not ports:
-        print("❌ No Arduino ports found.")
-        return
-
-    for port in ports:
-        thread = threading.Thread(target=listen_to_arduino, args=(port,), daemon=True)
-        thread.start()
+    while True:
+        ports = find_all_arduino_ports()
+        for port in ports:
+                if port not in connected_ports:
+                    thread = threading.Thread(target=listen_to_arduino, args=(port,), daemon=True)
+                    thread.start()
+                    connected_ports.add(port)
+        time.sleep(2) # Check every 2 seconds.
 
 # License Platform.
 def get_machine_id():
@@ -799,7 +803,8 @@ if __name__ == '__main__':
         # 🔸 Start Arduino listener in separate thread
         arduino_thread = threading.Thread(target=arduino_commands, daemon=True)
         arduino_thread.start()
-
+        
+        os.system("v01_updater_lanh.py")
         print ('it has been updated')
         # Run the program
         main()
