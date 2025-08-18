@@ -356,6 +356,11 @@ def main():
         enter_start_time = 0
         ENTER_HOLD_DURATION = 3000 
 
+        # Variables to the score button.
+        score_key_pressed = False
+        score_key_time = 0
+        score_pressed_duration = 3000
+
         # Last input time variable
         last_input_time = time.time()
 
@@ -637,23 +642,30 @@ def main():
                         if winner and event.key in [pygame.K_LEFT, pygame.K_RIGHT, pygame.K_RETURN]:
                             winner = None
                             winner_start_time = None
+
                         # Point if left key is pressed to the player who controls it. 
-                        if event.key == pygame.K_LEFT:
+                        if event.key == pygame.K_LEFT and not score_key_pressed:
                             if player1_controls_left:
                                 score_point(player1, player2)
                                 con.peep_sound.play()
                             else:
                                 score_point(player2, player1)
                                 con.peep_sound.play()
+                            score_key_pressed = True
+                            score_key_time = pygame.time.get_ticks()
 
                         # Point if right key is pressed to the player who controls it. 
-                        elif event.key == pygame.K_RIGHT:
+                        elif event.key == pygame.K_RIGHT and not score_key_pressed:
                             if player1_controls_left:
                                 score_point(player2, player1)
                                 con.peep_sound.play()
                             else:
                                 score_point(player1, player2)
                                 con.peep_sound.play()
+                            score_key_pressed = True
+                            score_key_time = pygame.time.get_ticks()
+                        
+                        
 
                         # Enter to start time, if it has started and pressed it resets.
                         elif event.key == pygame.K_RETURN:
@@ -685,11 +697,10 @@ def main():
                     elif event.type == pygame.KEYUP:
                         if event.key == pygame.K_RETURN:
                             enter_key_held = False
-    
+                
+                                     
                  # Updating the game tick in fps values, and updating display.
                 clock.tick(fps)
-
-
 
                 # Draws the background
                 con.win.blit(background, (0, 0))
@@ -762,6 +773,10 @@ def main():
                         match_started, start_time, elapsed_time = reset_timer(match_started, start_time, elapsed_time)
                         enter_key_held = False
 
+                # It checks if the score button has been pressed.
+                if pygame.time.get_ticks() - score_key_time > score_pressed_duration:
+                    score_key_pressed = False
+
                 # Draws the victory
                 if winner:
                     # Create the winner text surface with a smaller font
@@ -781,9 +796,7 @@ def main():
 
                     # Blit the background first, then the text
                     con.win.blit(background_box, background_rect)
-                    con.win.blit(winner_surface, winner_rect)
-
-                       
+                    con.win.blit(winner_surface, winner_rect) 
                 
                 # in main loop (or right before it)
                 pygame.display.update()
