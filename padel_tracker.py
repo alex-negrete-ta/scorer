@@ -16,7 +16,7 @@ import v01_updater_lanh as appup
 import license_key as lkey
 
 # Version Number
-version_number = "1.0.7"
+version_number = "1.0.8"
 
 # Set of ports already connected.
 connected_ports = set()
